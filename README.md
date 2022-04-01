@@ -1,70 +1,72 @@
-# Getting Started with Create React App
+# Lottery Dapp
+基於 React + Ethers.js + Wagmi 串接樂透 Solidity Dapp
+![Lottery](./LotteryCover.png)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+- [Rinkeby 合約](https://rinkeby.etherscan.io/address/0x104c71332295323c1a6264bb17907ff683d0def4)
 
-## Available Scripts
 
-In the project directory, you can run:
+## Contract
 
-### `npm start`
+``` js
+// SPDX-License-Identifier: GPL-3.0
+pragma solidity ^0.8.2;
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+contract Lottery {
+    address payable[] public players;
+    address public lastWinner;
+    address public manager;
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+    constructor() {
+        manager = msg.sender;
+    }
 
-### `npm test`
+    function enter() public payable {
+        require(msg.value == 0.1 ether);
+        players.push(payable(msg.sender));
+    }
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+    function getBalance() public view returns(uint) {
+        return address(this).balance;
+    }
 
-### `npm run build`
+    function getPlayers() public view returns (address payable[] memory) {
+        return players;
+    }
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+    function random() public view returns(uint) {
+        return uint(keccak256(abi.encodePacked(block.difficulty, block.timestamp, players.length)));
+    }
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+    function pickWinner() public {
+        require(msg.sender == manager);
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+        uint r = random();
+        address payable winner;
+        uint index = r % players.length;
+        winner = players[index];
 
-### `npm run eject`
+        lastWinner = winner;
+        winner.transfer(getBalance());
+        players = new address payable[](0);
+    }
+}
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 安裝
+本專案採自 Create React App [Create React App](https://github.com/facebook/create-react-app)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+``` bash
+$cd lottery-dapp
+$yarn install
+$yarn start
+```
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## 套件
+使用以下套件
+- [Create React App](https://github.com/facebook/create-react-app)
+- [Wagmi React Hook](https://wagmi.sh/)
+- [Ethers.js](https://docs.ethers.io/v5/)
+- [React Bootstrap](https://react-bootstrap.github.io/)
+- [sweetalert2](https://sweetalert2.github.io/)
