@@ -7,11 +7,9 @@
 
 [Lottery Dapp](https://hazelwu2.github.io/lottery-dapp/) is a dapp based on react, wagmi, ethers.js, connected with a simple lottery solidty contract.
 [Demo](https://hazelwu2.github.io/lottery-dapp/)
-<div style="margin-bottom:120px;">
+<div style="margin-top:40px;">
   <img src="./LotteryCover.png" />
 </div>
-
-
 
 ## Contract Info
 - Solidity Version 0.8.2
