@@ -1,61 +1,27 @@
 # Lottery Dapp
-基於 React + Ethers.js + Wagmi 串接樂透 Solidity Dapp
-![Lottery](./LotteryCover.png)
+<a href="https://hazelwu2.github.io/lottery-dapp/">
+    <img src="./LOTTERY-logos.jpeg" alt="Lottery Dapp" title="LOTTERY DAPP" align="right" height="120" />
+</a>
 
-- [Rinkeby 合約](https://rinkeby.etherscan.io/address/0x104c71332295323c1a6264bb17907ff683d0def4)
+:star: Star me on GitHub — it motivates me a lot!
 
-
-## Contract
-
-``` js
-// SPDX-License-Identifier: GPL-3.0
-pragma solidity ^0.8.2;
-
-contract Lottery {
-    address payable[] public players;
-    address public lastWinner;
-    address public manager;
-
-    constructor() {
-        manager = msg.sender;
-    }
-
-    function enter() public payable {
-        require(msg.value == 0.1 ether);
-        players.push(payable(msg.sender));
-    }
-
-    function getBalance() public view returns(uint) {
-        return address(this).balance;
-    }
-
-    function getPlayers() public view returns (address payable[] memory) {
-        return players;
-    }
-
-    function random() public view returns(uint) {
-        return uint(keccak256(abi.encodePacked(block.difficulty, block.timestamp, players.length)));
-    }
-
-    function pickWinner() public {
-        require(msg.sender == manager);
-
-        uint r = random();
-        address payable winner;
-        uint index = r % players.length;
-        winner = players[index];
-
-        lastWinner = winner;
-        winner.transfer(getBalance());
-        players = new address payable[](0);
-    }
-}
-```
+[Lottery Dapp](https://hazelwu2.github.io/lottery-dapp/) is a dapp based on react, wagmi, ethers.js, connected with a simple lottery solidty contract.
+[Demo](https://hazelwu2.github.io/lottery-dapp/)
+<div style="margin-bottom:120px;">
+  <img src="./LotteryCover.png" />
+</div>
 
 
-## 安裝
-本專案採自 Create React App [Create React App](https://github.com/facebook/create-react-app)
 
+## Contract Info
+- Solidity Version 0.8.2
+
+- Contract Source Code in path `src/contract/lottery.sol`
+- [Contract Address](https://rinkeby.etherscan.io/address/0x104c71332295323c1a6264bb17907ff683d0def4)
+
+
+## How It Works
+This project is taken from [Create React App](https://github.com/facebook/create-react-app), Metamask please switch network using Rinkeby.
 
 ``` bash
 $cd lottery-dapp
@@ -63,8 +29,9 @@ $yarn install
 $yarn start
 ```
 
-## 套件
-使用以下套件
+
+## Library
+Use the following library
 - [Create React App](https://github.com/facebook/create-react-app)
 - [Wagmi React Hook](https://wagmi.sh/)
 - [Ethers.js](https://docs.ethers.io/v5/)

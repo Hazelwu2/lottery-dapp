@@ -2,7 +2,7 @@
   "name": "lottery",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://hazelwu2.github.io/lottery-dapp",
+  "homepage": "https://hazelwu2.github.io/lottery-dapp/",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.3",
     "@testing-library/react": "^12.1.4",
@@ -22,7 +22,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "deploy": "gh-pages -d build"
+    "deploy": "react-scripts build && gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
