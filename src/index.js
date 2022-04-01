@@ -3,10 +3,17 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { Provider as WagmiProvider } from 'wagmi'
+import { providers } from "ethers";
+
+const provider = ({ chainId }) =>
+  new providers.InfuraProvider(4, process.env.REACT_APP_INFURA_ID)
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <WagmiProvider provider={provider}>
+      <App />
+    </WagmiProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
